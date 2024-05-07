@@ -1,0 +1,20 @@
+{% extends "./base/base_auth.html" %}
+{% block title %}Verificación{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block body %}
+<section class="auth">
+<div class="container-form" id="active-account">
+    <div>
+        <div class="info-childs">
+            <h2>Cuenta activada!</h2>
+            <p class="description">Tu cuenta de usuario ha sido verificada y activada</p>
+            <i class='bx bxs-happy-beaming'></i>
+            <input type="button" value="Volver" onclick="window.location.href = '/auth';" id="redirect-btn" />
+        </div>
+    </div>
+</div>
+</section>
+
+{% endblock %}

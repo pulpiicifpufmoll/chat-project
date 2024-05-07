@@ -1,0 +1,294 @@
+.file-list li,
+select#file-list-ingested option {
+    background-color: #f0f0f0;
+    height: 3.6vh;
+    display: flex;
+    align-items: center;
+}
+
+.file-list li:nth-child(odd),
+select#file-list-ingested option:nth-child(odd) {
+    background-color: #ffffff;
+}
+
+/* .custom-file-input~.custom-file-label::after {
+    content: "Archivos";
+} */
+
+.container{
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+}
+
+#nav-files{
+    padding: 10px 0 10px 0;
+    margin: 0;
+}
+
+#file-list-ingested {
+    border-color: transparent;
+}
+
+.file-list{
+    min-height: 250px;
+    background-color:#ffffffb8;
+}
+
+#chat {
+    font-family: 'Open Sans', 'Helvetica Neue', sans-serif;
+    height: 100%;
+    position: relative;
+    scroll-behavior: smooth;
+}
+
+.load-cont button{
+    background-color: var(--btn-color-darker);
+    color: white;
+}
+
+form{
+    width: 65%;
+    background-color: transparent;
+}
+
+#chat::-webkit-scrollbar-track,
+form::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: #F5F5F5;
+    border-radius: 10px;
+}
+
+#chat::-webkit-scrollbar,
+form::-webkit-scrollbar {
+    width: 10px;
+    background-color: #F5F5F5;
+}
+
+#chat::-webkit-scrollbar-thumb,
+form::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-image: -webkit-gradient(linear,
+            left bottom,
+            left top,
+            color-stop(0.44, rgb(122, 153, 217)),
+            color-stop(0.72, rgb(73, 125, 189)),
+            color-stop(0.86, rgb(28, 58, 148)));
+}
+
+
+
+form div ul{
+    padding: 0;
+}
+p.text-center {
+    text-shadow: 2px 2px 8px #000000;
+}
+
+
+@media (max-width: 992px) {
+
+    #chat {
+        height: 40em;
+        max-height: 40em;
+    }
+}
+
+
+.loading-cont {
+    height: 2.5vh;
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+}
+
+
+@keyframes loading {
+    0% {
+        content: "Cargando archivos.";
+    }
+
+    25% {
+        content: "Cargando archivos..";
+    }
+
+    50% {
+        content: "Cargando archivos...";
+    }
+
+    100% {
+        content: "Cargando archivos";
+    }
+}
+
+#loading::after {
+    content: "Cargando archivos";
+    animation: loading 1s infinite;
+}
+
+@keyframes deleting {
+    0% {
+        content: "Borrando archivos.";
+    }
+
+    25% {
+        content: "Borrando archivos..";
+    }
+
+    50% {
+        content: "Borrando archivos...";
+    }
+
+    100% {
+        content: "Borrando archivos";
+    }
+}
+
+@keyframes loading-chat {
+    0% {
+        content: "Cargando respuesta.";
+    }
+
+    16.6% {
+        content: "Cargando respuesta..";
+    }
+
+    33.3% {
+        content: "Cargando respuesta...";
+    }
+
+    49.6% {
+        content: "Cargando respuesta....";
+    }
+
+    66.6% {
+        content: "Cargando respuesta.....";
+    }
+
+    100% {
+        content: "Cargando respuesta";
+    }
+}
+#delete-files{
+    display: flex;
+}
+
+#confirm-delete {
+    display: none;
+}
+
+#loading {
+    display: none;
+}
+
+#deleting {
+    display: none;
+}
+
+#chat-crono {
+    margin-left: auto;
+    margin-right: 20px;
+    display: flex;
+    align-items: center;
+    font-weight: 400;
+}
+
+
+#loading-chat {
+    display: none;
+    font-size: 1em;
+    font-weight: 400;
+}
+
+#loading-chat::after {
+    content: "Cargando respuesta";
+    animation: loading-chat 1s infinite;
+}
+
+#deleting::after {
+    content: "Borrando archivos";
+    animation: deleting 1s infinite;
+}
+
+.selected-cont {
+    margin-top: 2.5vh;
+}
+
+.message {
+    max-width: 95%;
+    border-radius: 10px;
+    width: fit-content;
+}
+
+#user_message {
+    margin-left: auto;
+}
+
+/* img {
+    height: 4em;
+    margin: auto;
+} */
+
+/* .nav button:focus {
+    box-shadow: none;
+    background-color: #007BFF;
+} */
+
+
+#search-btn,
+#reset-search-btn,
+#stop-btn {
+    cursor: pointer;
+}
+
+
+#reset-search-btn {
+    display: none;
+}
+
+
+#search-input {
+    display: none;
+    height: 95%;
+    transition: width 0.4s ease-in-out, opacity 0.3s ease-in;
+}
+
+.list-header {
+    padding: 5px;
+    /* display: flex;
+    align-items: center;
+    justify-content: center; */
+}
+
+.input-group-append button {
+    width: 4.5em;
+}
+
+#stop-btn {
+    display: none;
+}
+
+#up-btn {
+    border-radius: 50%;
+    border: solid #343A40 1px;
+    padding: 3px;
+    color: #F8F9FA;
+    height: 2em;
+    width: 2em;
+    background-color: #343A40;
+    transition: all 0.3s ease;
+}
+
+#up-btn:hover {
+    color: #343A40;
+    background-color: #F8F9FA;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5), inset 0 0 4px rgba(0, 0, 0, 0.5);
+}
+
+#search-display {
+    display: block;
+}
+
+#query-display {
+    display: none;
+}

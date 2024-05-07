@@ -1,0 +1,55 @@
+{% extends "./base/base.html" %}
+{% block title %}Chat{% endblock %}
+{% block head %}
+{{ super() }}
+{% assets "chat_css" %}
+<link rel="stylesheet" href="{{ ASSET_URL }}">
+{% endassets %}
+{% endblock %}
+{% block body %}
+
+<section id="main-container">
+
+  <div id="nav-buttons">
+    <button id="search" type="button">Buscar
+      texto</button>
+    <button id="query" type="button">Consultar
+      documentos</button>
+
+
+    <!-- INVISIBLE -->
+    <div id="loading-chat" class="pl-3 text-light d-none"></div>
+    <div id="chat-crono" class="ml-auto mr-4 text-light"></div>
+  </div>
+
+  <div class="d-block border border-primary rounded overflow-auto w-100 bg-light p-2" id="chat">
+    <div id="search-display" class="w-100 h-100"></div>
+    <div id="query-display" class="w-100 h-100"></div>
+  </div>
+
+  <div class="chat">
+    <div class="messages">
+      {% assets "img_chat" %}
+      <div class="messages-content">
+
+
+      </div>
+      {% endassets %}
+    </div>
+    <div class="message-box" >
+      <span id="input" class="input message-input" role="textbox" data-placeholder="Escribe un mensaje..."
+        aria-placeholder="Escribe un mensaje..." contenteditable>
+
+      </span>
+      <div id="input-buttons">
+        <button id="send-btn" type="button" class="message-submit"><i class='bx bxs-send'></i></button>
+        <button id="reset-btn" type="button" class="message-submit"><i class='bx bx-reset'></i></i></button>
+      </div>
+
+    </div>
+  </div>
+</section>
+{% assets "chat_js" %}
+<script type="module" src="{{ ASSET_URL }}"></script>
+{% endassets %}
+{% endblock %}

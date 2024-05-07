@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% block head %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/imagen_chat.png') }}">
+    <title>{% block title %}{% endblock %}</title>
+    
+    {% assets "base_css" %}
+        <link rel="stylesheet" href="{{ ASSET_URL }}">
+    {% endassets %}
+    {% endblock %}
+</head>
+
+<body>
+    <aside>
+        <ul id="bar-elements">
+            <ul>
+                <h1>
+                    <a href="https://www.angel24.es/es" class="logo">
+                        <img width="190" src="{{ url_for('static', filename='img/logo.png') }}"
+                            alt="Logo de Angel24">
+                    </a>
+                </h1>
+                <li class="bar-item">
+                    <a href="/chat">
+                        <i class='bx bxs-conversation'></i>
+                        Chat
+                    </a>
+                </li>
+                <li class="bar-item">
+                    <a href="/admin">
+                        <i class='bx bxs-file-pdf'></i>
+                        Admin
+                    </a>
+                </li>
+                <li class="bar-item">
+                    <a href="/settings">
+                        <i class='bx bxs-cog'></i>
+                        Settings
+                    </a>
+                </li>
+            </ul>
+            <ul>
+                <li>
+                    <p class="copyright">Copyright ©2024 <br> All rights reserved | Angel24</p>
+                </li>
+                <li id="logout">
+                <a href="/logout">
+                    <i class='bx bxs-log-out'></i>
+                    <p> 
+                        Cerrar Sesión
+                    </p>
+                </a>
+            </li>
+            </ul>
+            
+        </ul>
+    </aside>
+    {% block body %}
+
+    {% endblock %}
+</body>
+<footer>
+
+</footer>
+
+</html>

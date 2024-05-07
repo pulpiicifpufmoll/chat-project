@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error - 403</title>
+    {% assets "error_css" %}
+    <link rel="stylesheet" href="{{ ASSET_URL }}">
+    {% endassets %}
+</head>
+
+<body translate="yes" class="error-container">
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="main">
+        <h1>403</h1>
+        <h2>Acceso Prohibido<br>No tienes permiso para acceder a esta página.</h2>
+        <button type="button" onclick="window.location.href = '/auth';" id="redirect-btn">Volver</button>
+    </div>
+</body>
+
+</html>

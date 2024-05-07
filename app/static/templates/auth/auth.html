@@ -1,0 +1,97 @@
+{% extends "./base/base_auth.html" %}
+{% block title %}Autenticacion{% endblock %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block body %}
+<div class="social-icons-container">
+    <button id="social-btn">Síguenos <span class="arrow-down">&#9660;</span></button>
+    <div class="social-icons" id="social-icons-container">
+        <a class="social" href="https://www.youtube.com/@angel24oficinascentrales79" target="_blank"><i
+                class="bx bxl-youtube"></i></a>
+        <a class="social" href="https://www.linkedin.com/company/angel24/mycompany/verification/" target="_blank"><i
+                class="bx bxl-linkedin"></i></a>
+        <a class="social" href="https://twitter.com/i/flow/login?redirect_after_login=%2Fangel24_es" target="_blank"><i
+                class="bx bxl-twitter"></i></a>
+        <a class="social" href="https://www.facebook.com/angel24outsourcing/" target="_blank"><i
+                class="bx bxl-facebook"></i></a>
+        <a class="social" href="https://www.instagram.com/angel24_es/?hl=en" target="_blank"><i
+                class="bx bxl-instagram"></i></a>
+    </div>
+</div>
+<section class="auth">
+    <div class="bubble-container"></div>
+    <div class="container-form register">
+        <div class="information">
+            <div class="info-childs">
+                <h2>Bienvenido</h2>
+                <p>Si ya tiene cuenta, por favor pulse aquí.</p>
+                <input type="button" value="Iniciar Sesión" class="side-btn" id="sign-in">
+            </div>
+        </div>
+        <div class="form-information">
+            <div class="form-information-childs">
+                <h2>Crear Cuenta</h2>
+                <p>Introduzca sus datos, por favor.</p>
+                <form class="form" id="register-form" action="" method="post">
+                    {{ register_form.hidden_tag() }}
+                    <label for="fullname">
+                        <i class='bx bx-user'></i>
+                        {{ register_form.fullname }} <br>
+                    </label>
+                    <label for="email-reg">
+                        <i class='bx bx-envelope'></i>
+                        {{ register_form.email }} <br>
+                    </label>
+                    <label for="password-register">
+                        <i class='bx bx-lock'></i>
+                        {{ register_form.password }} <br>
+                    </label>
+                    <label for="password-confirm-register">
+                        <i class='bx bx-lock'></i>
+                        {{ register_form.password_confirm }} <br>
+                    </label>
+                    {{ register_form.submit }}
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-form login hide">
+        <div class="information">
+            <div class="info-childs">
+                <h2>Crear cuenta</h2>
+                <p>Si aún no tiene una cuenta, por favor regístrese aquí.</p>
+                <input type="button" value="Registrarse" class="side-btn" id="sign-up">
+            </div>
+        </div>
+        <div class="form-information">
+            <div class="form-information-childs">
+                <h2>Iniciar sesión</h2>
+                <div class="icons">
+                </div>
+                <p>Introduzca sus datos, por favor.</p>
+                <form class="form" id="login-form" action="" method="post">
+                    {{ login_form.hidden_tag() }}
+                    <label for="email-log">
+                        <i class='bx bx-envelope'></i>
+                        {{ login_form.email }} <br>
+                    </label>
+                    <label for="password-log">
+                        <i class='bx bx-lock'></i>
+                        {{ login_form.password }} <br>
+                    </label>
+                    <div class="remember">
+                        {{ login_form.remember_me.label }}
+                        {{ login_form.remember_me }}
+                    </div>
+                    {{ login_form.submit }}
+                    <a href="/forgot-password" class="gradient-text">¿Olvidó su contraseña?</a>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="toast-container">
+    </div>
+</section>
+{% endblock %}

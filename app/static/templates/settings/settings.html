@@ -1,0 +1,75 @@
+{% extends "./base/base.html" %}
+{% block title %}Opciones{% endblock %}
+{% block head %}
+{{ super() }}
+{% assets "settings_css" %}
+<link rel="stylesheet" href="{{ ASSET_URL }}">
+{% endassets %}
+{% endblock %}
+{% block body %}
+<div class="main-container">
+    <div class="container content clear-fix">
+        <h2 class="mt-5 mb-5">Tus datos</h2>
+        <div class="row justify-content-center pb-5" id="container-form">
+            <div class="col-lg-3 col-sm-12 text-center">
+                <div href="#" class="d-inline"><img src="/static/img/imagen_chat.png" width="130px">
+                    <input type="file" id="photo" accept="image/*" alt="input tipo para imagen">
+                </div>
+            </div>
+            <form class="row col-md-6" id="form-settings">
+                {{ settings_data.hidden_tag() }}
+                <div class="row">
+                    <div class="form-group col-lg-5 col-md-12 mt-3">
+                        {{ settings_data.fullname.label }}<br>
+                        {{ settings_data.fullname }}
+                    </div>
+                    <div class="form-group col-lg-7 col-md-12 mt-3">
+                        {{ settings_data.email.label }}<br>
+                        {{ settings_data.email }}
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between mt-5">
+                    <div>
+                        <button type="submit" class="btn save-changes">Guardar</button>
+                    </div>
+                    <div>
+                        <button type="button" id="change-password" class="btn change-form">
+                            Cambiar contraseña
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- PASSWORD FORM -->
+        <div id="container-form-password" class="d-flex align-items-center justify-content-center hide">
+            <form class="row justify-content-center" id="form-settings-password">
+                {{ settings_passwords.hidden_tag() }}
+                <div class="form-group col-md-6 col-sm-12 d-flex flex-column">
+                    {{ settings_passwords.old_password.label }}
+                    {{ settings_passwords.old_password }}
+                </div>
+                <div class="form-group col-md-6 col-sm-12 d-flex flex-column">
+                    {{ settings_passwords.new_password.label }}
+                    {{ settings_passwords.new_password }}
+                </div>
+                <div class="form-group col-md-6 col-sm-12 d-flex flex-column">
+                    {{ settings_passwords.repeat_password.label }}
+                    {{ settings_passwords.repeat_password }}
+                </div>
+                <div class="d-flex justify-content-around mt-5">
+                    <div>
+                        <button type="submit" class="btn save-changes">Guardar</button>
+                    </div>
+
+                    <div>
+                        <button type="button" id="change-main" class="btn change-form">Cambiar datos</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="{{ url_for('static', filename='js/settings.js') }}"></script>
+
+{% endblock %}

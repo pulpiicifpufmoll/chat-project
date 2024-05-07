@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/imagen_chat.png') }}">
+    <title>{% block title %}{% endblock %}</title>
+    
+    {% assets "auth_css" %}
+        <link rel="stylesheet" href="{{ ASSET_URL }}">
+    {% endassets %}
+    {% endblock %}
+</head>
+<body>
+{% block body %}
+
+{% endblock %}
+{% assets "auth_js" %}
+  <script type="module" src="{{ ASSET_URL }}"></script>
+{% endassets %}
+</body>
+<footer>
+    
+</footer>
+</html>

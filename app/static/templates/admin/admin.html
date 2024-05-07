@@ -1,0 +1,106 @@
+{% extends "./base/base.html" %}
+{% block title %}Admin{% endblock %}
+{% block head %}
+{{ super() }}
+{% assets "admin_css" %}
+<link rel="stylesheet" href="{{ ASSET_URL }}">
+{% endassets %}
+{% endblock %}
+{% block body %}
+<div class="container">
+    <form>
+        <div id="nav-files" class="row">
+            <button class="btn btn-outline-secondary col-lg-6 col-md-12 no-collapse" type="button"
+            id="open-dir">Cargar directorio</button>
+            <input type="file" id="input-dir" style="display: none;"
+                accept=".hwp, .pdf, .docx, .pptx, .ppt, .pptm, .jpg, .png, .jpeg, .csv, .epub, .md, .mbox, .ipynb, .json, .txt"
+                webkitdirectory directory>
+            <input class="form-control col-md-12  col-lg-6" type="file" id="input-file" 
+                 multiple 
+                accept=".hwp, .pdf, .docx, .pptx, .ppt, .pptm, .jpg, .png, .jpeg, .csv, .epub, .md, .mbox, .ipynb, .json, .txt">
+        </div>
+
+        <div class="load-cont">
+            <div class="list-header p-1 text-center rounded-top bg-secondary text-light">
+                Archivos para cargar
+            </div>
+
+            <ul id="file-list-pre" class="file-list rounded-bottom overflow-auto m-0">
+            </ul>
+
+            <div class="p-0 m-0 d-lg-flex d-md-block">
+                <button id="load-files" type="button"
+                    class="btn btn-primary w-100 mb-1 mb-lg-0 mb-md-1 mr-1">Cargar
+                    archivos</button>
+                <button id="reset-files" type="button"
+                    class="btn btn-info w-100">Reestablecer</button>
+            </div>
+            <div class="loading-cont">
+                <div id="loading" class="text-primary"></div>
+            </div>
+
+        </div>
+
+
+        <div class="row m-0">
+            <div class="list-header d-flex bg-secondary text-light w-100 text-center rounded-top align-items-center">
+                <input type="text" id="search-input" class="form-control" placeholder="Buscar archivo">
+                <div id="search-label" class="w-100 ml-4  text-center">
+                    Archivos cargados
+                </div>
+                <div class="ml-auto d-flex align-items-center h-100 mr-1">
+                    <div id="search-btn" class="material-symbols-outlined">
+                        search
+                    </div>
+                    <div id="reset-search-btn" class="material-symbols-outlined">
+                        restart_alt
+                    </div>
+                </div>
+
+            </div>
+
+            <select id="file-list-ingested" multiple class="selectpicker file-list w-100 m-0" data-show-subtext="true"
+                data-live-search="true">
+            </select>
+            <button id="select-all-ingesteds" type="button" class="btn btn-info w-100 ">Seleccionar
+                Todo</button>
+        </div>
+
+        <div class="selected-cont">
+            <div class="list-header bg-secondary text-light w-100 text-center rounded-top p-1">
+                Archivos seleccionados (consultar o borrar)
+            </div>
+
+            <ul id="file-list-selected" class="file-list overflow-auto m-0">
+            </ul>
+
+            <div id="delete-files" class="d-flex">
+                <button type="button" id="delete" class="btn btn-danger w-100 mb-lg-0 mr-1">Borrar
+                    archivos</button>
+                <button type="button" id="reset-files-selected" class="btn btn-info w-100">Restablecer</button>
+            </div>
+
+
+            <div id="confirm-delete" class="bg-warning rounded p-0 mb-0">
+                <div class="d-flex align-items-center justify-content-center flex-grow-1">
+                    <p class="m-0 text-center">Se borrarán archivos seleccionados</p>
+                </div>
+
+                <button type="button" id="btn-cancel-delete" class="btn btn-info">
+                    Cancelar
+                </button>
+                <button id="confirm-delete-btn" type="button" class="btn btn-danger">
+                    Borrar archivos
+                </button>
+            </div>
+
+            <div class="loading-cont">
+                <div id="deleting" class="text-danger"></div>
+            </div>
+        </div>
+    </form>
+</div>
+{% assets "admin_js" %}
+<script type="module" src="{{ ASSET_URL }}"></script>
+{% endassets %}
+{% endblock %}
