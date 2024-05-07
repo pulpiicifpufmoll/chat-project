@@ -1,13 +1,12 @@
 from flask import Flask
 from flask_login import LoginManager
-from instance.database import Database
+from .config import BaseConfig, Database
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_mail import Mail
 from dotenv import load_dotenv
 from flask_assets import Environment
 from .assets import bundles
-import os
 
 load_dotenv()
 
@@ -26,7 +25,7 @@ def create_app():
     assets.register(bundles)
     
     connectionParams = dbConfig.connString
-    app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
+    app.config['SECRET_KEY'] = BaseConfig.SECRET_KEY
     app.config['SQLALCHEMY_DATABASE_URI'] = "mssql+pyodbc:///?odbc_connect=%s" % connectionParams
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True

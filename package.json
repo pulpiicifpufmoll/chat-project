@@ -1,0 +1,31 @@
+{
+  "name": "proyecto-final",
+  "version": "1.0.0",
+  "description": "Proyecto final que junta Electron con Flask",
+  "main": "renderer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron .",
+    "package": "node package_python.js && npm run -s package-electron && npm run -s package-cleanup",
+    "package-electron": "electron-builder --publish=never",
+    "package-cleanup": "rm -rf build && rm -rf run_app.spec && rm -rf dist-python"
+  },
+  "author": "David Acedo Pulpillo",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^30.0.2",
+    "electron-builder": "^24.13.3",
+    "ps-tree": "^1.2.0"
+  },
+  "build": {
+    "appId": "com.chatproject.app",
+    "productName": "ElectronFlask",
+    "asar": false,
+    "asarUnpack": [
+      "**/*.node"
+    ],
+    "mac": {
+      "category": "public.app-category.utilities"
+    }
+  }
+}
