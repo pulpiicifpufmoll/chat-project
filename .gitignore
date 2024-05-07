@@ -3,7 +3,6 @@ __pycache__/
 models/__pycache__/
 *.py[cod]
 *$py.class
-./config.py
 
 # C extensions
 *.so
@@ -129,6 +128,10 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
+#node_modules
+node_modules/
+build/
+dist/
 # PyCharm
 #  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
 #  be found at https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
