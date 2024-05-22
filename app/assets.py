@@ -8,7 +8,7 @@ bundles = {
         'css/base.css',
         'css/sidebar.css',
         filters='cssmin',
-        # output='gen/base.css'
+        output='gen/base.css'
     ),
 
     'auth_css': Bundle(
@@ -16,14 +16,14 @@ bundles = {
         'css/auth.css',
         'css/base.css',
         filters='cssmin',
-        # output='gen/auth.css'
+        output='gen/auth.css'
     ),
 
     'auth_js': Bundle(
         'js/auth.js',
         'js/forgot.js',
         filters='jsmin',
-        # output='gen/auth.js'
+        output='gen/auth.js'
     ),
     
     
@@ -51,15 +51,14 @@ bundles = {
 
     'img_chat': Bundle(
         'img/imagen_chat.png',
-        # output='gen/imagen_chat.png'
+        output='gen/imagen_chat.png'
     ),
     
     'settings_css': Bundle(
-                # 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css',
         'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css',
         'css/settings.css',
         filters='cssmin',
-        # output='gen/settings.css'
+        output='gen/settings.css'
     ),
     
     'error_css': Bundle(
