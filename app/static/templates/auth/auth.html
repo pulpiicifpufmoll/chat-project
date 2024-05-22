@@ -51,7 +51,9 @@
                         <i class='bx bx-lock'></i>
                         {{ register_form.password_confirm }} <br>
                     </label>
-                    {{ register_form.submit }}
+                    submit = SubmitField('Crear cuenta', render_kw={"id": "submit-register"})
+                    <button type="submit" id="submit-register">Enviar</button>
+                    <!-- {{ register_form.submit }} -->
                 </form>
             </div>
         </div>

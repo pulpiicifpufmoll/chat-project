@@ -8,8 +8,8 @@ from flask_principal import identity_changed, Identity, AnonymousIdentity
 from time import time
 from app import mail
 from flask_mail import Message
-import jwt
-from app.config import BaseConfig
+import jwt, os
+
 #Declaramos una variable con las restricciones del formato del email.
 # email_pattern = r'^[a-zA-Z0-9._%+-]+@angel24\.com$'
 email_pattern = r'^[a-zA-Z0-9._%+-]+@gmail\.com$'
@@ -34,6 +34,7 @@ def admin_required(f):
 # --------------------LOGIN------------------------
 
 def validation_login(form):
+    print("HOLAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
     if form.validate_on_submit():
         email = form.email.data
         password = form.password.data
@@ -114,7 +115,7 @@ def create_user_token(user, expires):
             'exp': time() + expires 
         }
 
-        secret_key = BaseConfig.SECRET_KEY
+        secret_key = os.getenv('SECRET_KEY')
         token = jwt.encode(payload, secret_key, algorithm='HS256')
         return token
 
@@ -124,7 +125,7 @@ def create_user_token(user, expires):
     return None
 
 def verify_user_token(token):
-    secret_key = BaseConfig.SECRET_KEY
+    secret_key = os.getenv('SECRET_KEY')
     try:
         payload = jwt.decode(token, secret_key, algorithms=['HS256'])
         user_email = payload['user_email']

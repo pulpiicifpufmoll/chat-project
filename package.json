@@ -4,21 +4,24 @@
   "description": "Proyecto final que junta Electron con Flask",
   "main": "renderer.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron .",
-    "package": "node package_python.js && npm run -s package-electron && npm run -s package-cleanup",
-    "package-electron": "electron-builder --publish=never",
-    "package-cleanup": "rm -rf build && rm -rf run_app.spec && rm -rf dist-python"
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "publish": "electron-forge publish"
   },
   "author": "David Acedo Pulpillo",
   "license": "ISC",
   "devDependencies": {
+    "@electron-forge/cli": "^7.4.0",
+    "@electron-forge/maker-deb": "^7.4.0",
+    "@electron-forge/maker-squirrel": "^7.4.0",
+    "@electron-forge/maker-zip": "^7.4.0",
     "electron": "^30.0.2",
     "electron-builder": "^24.13.3",
     "ps-tree": "^1.2.0"
   },
   "build": {
-    "appId": "com.chatproject.app",
+    "appId": "com.electron-flask.my-app",
     "productName": "ElectronFlask",
     "asar": false,
     "asarUnpack": [
@@ -26,6 +29,51 @@
     ],
     "mac": {
       "category": "public.app-category.utilities"
+    },
+    "files": [
+      "renderer.js",
+      "icon.png",
+      "node_modules/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "dist-python/",
+        "to": "app/dist-python",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ]
+  },
+  "config": {
+    "forge": {
+      "packagerConfig": {},
+      "makers": [
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "name": "electron_quick_start"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-zip",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "name": "@electron-forge/maker-deb",
+          "config": {}
+        },
+        {
+          "name": "@electron-forge/maker-rpm",
+          "config": {}
+        }
+      ]
     }
+  },
+  "dependencies": {
+    "electron-squirrel-startup": "^1.0.0",
+    "ps-tree": "^1.2.0"
   }
 }

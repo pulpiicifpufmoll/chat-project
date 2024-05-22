@@ -59,6 +59,7 @@ def settings():
 
 @bp_auth.route('/auth', methods=['GET', 'POST'])
 def auth():
+    print("PERO BUENOOOOOOOOOOOOOOOOO")
     login_form = LoginForm()
     register_form = RegisterForm()
 

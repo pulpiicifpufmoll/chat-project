@@ -19,8 +19,9 @@ btnSignUp.addEventListener("click", e => {
 })
 
 document.getElementById('register-form').addEventListener('submit', function (event) {
+    console.log("holiiiiiiiiiiii")
     event.preventDefault();
-    register();
+    //register();
 });
 
 document.getElementById('login-form').addEventListener('submit', function (event) {
@@ -66,6 +67,7 @@ function login() {
 }
 
 function register() {
+    console.log("lolazo")
     var registerForm = document.getElementById('register-form');
     var formData = new FormData(registerForm);
 
@@ -85,7 +87,7 @@ function register() {
             }
         }
     };
-    xhr.send(setFormKeyInData(formData, false));
+    // xhr.send(setFormKeyInData(formData, false));
     return false;
 }
 

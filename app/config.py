@@ -1,9 +1,5 @@
 import os
 
-
-class BaseConfig(object):
-    SECRET_KEY = os.getenv('SECRET_KEY')
-
 class Database(object):
     driver = os.getenv("DB_SQL_DRIVER")
     server = os.getenv("DB_HOST")
