@@ -1,8 +1,8 @@
-"""Crear tabla User
+"""DB con foto de perfil
 
-Revision ID: 35db40fd7a4a
-Revises: ec3cfcbf951b
-Create Date: 2024-04-19 09:43:10.672265
+Revision ID: 0340092a5586
+Revises: 
+Create Date: 2024-05-27 10:08:53.253589
 
 """
 from alembic import op
@@ -10,8 +10,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '35db40fd7a4a'
-down_revision = 'ec3cfcbf951b'
+revision = '0340092a5586'
+down_revision = None
 branch_labels = None
 depends_on = None
 
@@ -27,6 +27,7 @@ def upgrade():
     sa.Column('role', sa.String(length=5), nullable=True),
     sa.Column('authenticated', sa.Boolean(), nullable=False),
     sa.Column('active', sa.Boolean(), nullable=False),
+    sa.Column('profile_picture', sa.String(length=255), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('email')
     )

@@ -26,7 +26,6 @@ bundles = {
         output='gen/auth.js'
     ),
     
-    
     'chat_css': Bundle(
         'css/scrollbar.css',
         'css/chat.scss',        
@@ -35,19 +34,10 @@ bundles = {
     ),
 
     'chat_js': Bundle(
-        'https://code.jquery.com/jquery-3.7.1.js',
-        'https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js',
-        'https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js',
         'js/chat.js',
         filters='jsmin',
         output='gen/chat.js',
      ),
-
-    'chat_css': Bundle(
-        'css/scrollbar.css',
-        'css/chat.scss',
-        filters='libsass',
-        output='gen/sass.css'),
 
     'img_chat': Bundle(
         'img/imagen_chat.png',

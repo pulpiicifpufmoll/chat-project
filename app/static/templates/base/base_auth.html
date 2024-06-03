@@ -7,18 +7,22 @@
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/imagen_chat.png') }}">
     <title>{% block title %}{% endblock %}</title>
     
-    {% assets "auth_css" %}
+    <!-- {% assets "auth_css" %}
         <link rel="stylesheet" href="{{ ASSET_URL }}">
-    {% endassets %}
+    {% endassets %} -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
     {% endblock %}
 </head>
 <body>
 {% block body %}
 
 {% endblock %}
-{% assets "auth_js" %}
+<!-- {% assets "auth_js" %}
   <script type="module" src="{{ ASSET_URL }}"></script>
-{% endassets %}
+{% endassets %} -->
+<script type="module" src="{{ url_for('static', filename='js/auth.js') }}"></script>
 </body>
 <footer>
     

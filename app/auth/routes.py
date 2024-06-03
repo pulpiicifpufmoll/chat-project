@@ -4,9 +4,9 @@ from .models import User
 from flask_login import current_user, logout_user, login_required, AnonymousUserMixin
 from .forms import LoginForm, RegisterForm, SettingsData, SettingsPasswords
 import re
-from .utils import email_pattern, validation_auth_errors, validation_login, validation_register
+from ..utils import email_pattern, validation_auth_errors, validation_login, validation_register
 from flask_principal import identity_changed, Identity, AnonymousIdentity
-from .utils import verify_user_token, send_email_forgot_password, create_user_token, send_email_active_account
+from ..utils import verify_user_token, send_email_forgot_password, create_user_token, send_email_active_account
 
 @bp_auth.route('/')
 def root():
@@ -26,6 +26,8 @@ def settings():
             if settings_data.validate_on_submit():
                 fullname = settings_data.fullname.data
                 email = settings_data.email.data
+                profile_photo = settings_data.profile_picture.data
+                print(profile_photo)
                 current_user.email = email
                 current_user.fullname = fullname
                 User.save(current_user)
@@ -59,7 +61,6 @@ def settings():
 
 @bp_auth.route('/auth', methods=['GET', 'POST'])
 def auth():
-    print("PERO BUENOOOOOOOOOOOOOOOOO")
     login_form = LoginForm()
     register_form = RegisterForm()
 
@@ -129,9 +130,9 @@ def active_account(token):
     if request.method == 'POST':
         try:
             send_email_active_account(user, token)
-            return make_response(jsonify({'message': "active account mail sended"}), 200)
+            return make_response(jsonify({'message': "Correo de activación enviado"}), 200)
         except Exception as e:
-            return make_response(jsonify({'message': "error sending active account mail"}), 500)
+            return make_response(jsonify({'message': "Error enviando el correo de activación"}), 500)
     elif request.method == 'GET':
         user.active_user()
         user.save()

@@ -1,7 +1,7 @@
 from functools import wraps
 from flask import abort, make_response, jsonify, url_for, current_app
 from flask_login import current_user, login_user
-from .models import User
+from .auth.models import User
 import re
 from datetime import datetime
 from flask_principal import identity_changed, Identity, AnonymousIdentity
@@ -21,20 +21,19 @@ def get_email_corporation(email):
     else:
         return None
 
-def admin_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        # Verifica si el usuario actual tiene el rol de administrador
-        if current_user.is_authenticated and current_user.role == 'admin':
-            return f(*args, **kwargs)
-        else:
-            abort(403)
-    return decorated_function
+def createUserInfoJson(user_id):
+    user : User = User.get_user(user_id)
+    # company : Company = Company.get_company(user.company_id)
+    return {
+        'user_id': user.id,
+        'username': user.fullname,
+        'email': user.email,
+        'company_id': user.company_id
+    }
 
 # --------------------LOGIN------------------------
 
 def validation_login(form):
-    print("HOLAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
     if form.validate_on_submit():
         email = form.email.data
         password = form.password.data
@@ -45,8 +44,8 @@ def validation_login(form):
             if not user.is_active():
                 return make_response(jsonify({'message': 'La cuenta de correo aún no está verificada'}), 400)
             user.authenticated = True
-            
             user.save()
+            
             login_user(user, remember=form.remember_me.data)
             
             # Se establece el rol 'user' para el usuario     
@@ -165,14 +164,14 @@ def send_email_forgot_password(user, token):
 
 def send_email_active_account(user, token):
     subject = "Activación de cuenta"
-    sender_email = "angel24@gmail.com" 
+    sender_email = "pulpii.assists@gmail.com" 
     recipient_email = user.email
     
     message_body = f"""
     
     Hola {user.fullname},
 
-    Te damos la bienvenida a ChatI24. Para comenzar a disfrutar de nuestro servicio, necesitamos que actives tu cuenta.
+    Te damos la bienvenida a tu nuevo chat corporativo. Para comenzar a disfrutar de nuestro servicio, necesitamos que actives tu cuenta.
 
     Haz clic en el siguiente enlace para activar tu cuenta:
 
@@ -182,7 +181,7 @@ def send_email_active_account(user, token):
 
     Gracias,
 
-    Tu equipo de soporte, Angel24.
+    Tu equipo de soporte.
         
     """
     
