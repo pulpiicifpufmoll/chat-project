@@ -1,4 +1,6 @@
-import { showToast, createBubbles } from './utiasls.js';
+import { showToast, createBubbles } from './utils.js';
+
+document.getElementById('email').readOnly = true
 
 document.getElementById('change-password').addEventListener('click', function changePassword(params) {
     var form = document.getElementById('container-form');
@@ -7,8 +9,6 @@ document.getElementById('change-password').addEventListener('click', function ch
     form.classList.add("hide");
     passwordForm.classList.remove("hide");
 });
-
-document.getElementById('email').readOnly = true
 
 document.getElementById('change-main').addEventListener('click', function changePassword(params) {
     var form = document.getElementById('container-form');
@@ -29,8 +29,8 @@ document.getElementById('form-settings-password').addEventListener('submit', fun
 });
 
 function changeSettings(formId) {
-    var loginForm = document.getElementById(formId);
-    var formData = new FormData(loginForm);
+    var settingsForm = document.getElementById(formId);
+    var formData = new FormData(settingsForm);
 
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "/settings", true);
@@ -39,8 +39,9 @@ function changeSettings(formId) {
             if (xhr.status === 200) {
                 var userData = JSON.parse(xhr.response)
                 showToast(userData.message, "success")
+                var picture = document.getElementById('default_picture')
+                picture.src = 'static/img/profile/' + userData.profile_picture
             } else {
-                //TODO: mostrar un dialog wapo
                 var errorData = JSON.parse(xhr.response);
                 showToast(errorData.message, "error");
             }

@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, HiddenField, PasswordField, BooleanField, SubmitField
+from wtforms import StringField, HiddenField, PasswordField, BooleanField, SubmitField, FileField
 from wtforms.validators import DataRequired, Email, EqualTo, Length, ValidationError
 from flask_login import current_user
 from .models import User
@@ -31,6 +31,7 @@ class RegisterForm(FlaskForm):
 class SettingsData(FlaskForm):
     fullname = StringField('Nombre', validators=[DataRequired()])
     email = StringField('Email', validators=[Email(), valid_email])
+    profile_picture = FileField('Photo', render_kw={"accept": "image/*"})
     form_key = HiddenField('form-key', default="form-main")
 
 class SettingsPasswords(FlaskForm):

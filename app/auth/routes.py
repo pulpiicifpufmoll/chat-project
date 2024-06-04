@@ -20,18 +20,16 @@ def settings():
     
     settings_data.fullname.render_kw = {"value": current_user.fullname, "id": "fullname"}
     settings_data.email.render_kw = {"value": current_user.email, "id": "email"}
-    
     if request.method == "POST":
         if settings_data.form_key.data == "form-settings":
             if settings_data.validate_on_submit():
                 fullname = settings_data.fullname.data
-                email = settings_data.email.data
-                profile_photo = settings_data.profile_picture.data
-                print(profile_photo)
-                current_user.email = email
+                profile_picture = settings_data.profile_picture.data
+                
                 current_user.fullname = fullname
+                current_user.profile_picture = profile_picture.filename
                 User.save(current_user)
-                return make_response(jsonify({'message': "Datos actualizados"}), 200)  
+                return make_response(jsonify({'message': "Datos actualizados", 'profile_picture': profile_picture.filename}), 200)  
             
             return make_response(validation_auth_errors(settings_data), 400)  
 
@@ -56,7 +54,8 @@ def settings():
      
     return render_template('settings/settings.html',  
                            settings_data=settings_data, 
-                           settings_passwords=settings_passwords
+                           settings_passwords=settings_passwords,
+                           profile_picture=current_user.profile_picture
                            )
 
 @bp_auth.route('/auth', methods=['GET', 'POST'])
