@@ -29,3 +29,71 @@ body{
 h1, h2, h3, h4, h5, h6, p, a, input, label {
     font-size: inherit;
 }
+
+/*TOAST STYLES*/
+
+#toast-container {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+
+}
+
+.toast {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #333;
+    /* Puedes ajustar el color de fondo según tu diseño */
+    color: #fff;
+    /* Puedes ajustar el color del texto según tu diseño */
+    border-radius: 5px;
+    /* Ajusta el radio de borde según tu diseño */
+    padding: 10px 20px;
+    /* Ajusta el relleno según tu diseño */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    /* Añade sombra según tu diseño */
+}
+
+.toast.success {
+    background-color: #4CAF50;
+}
+
+.toast.error {
+    background-color: #f81b0b;
+}
+
+.toast-icon {
+    margin-right: 10px;
+}
+
+.bx {
+    font-size: 24px;
+    vertical-align: middle;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    to {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+}

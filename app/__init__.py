@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 from flask_login import LoginManager
 from .config import Database
 from flask_sqlalchemy import SQLAlchemy
@@ -7,6 +7,7 @@ from flask_mail import Mail
 from dotenv import load_dotenv
 from flask_assets import Environment
 from .assets import bundles
+from flask_socketio import SocketIO, join_room, leave_room, emit
 import os
 
 load_dotenv()
@@ -17,12 +18,13 @@ dbConfig = Database()
 migrate = Migrate()
 assets = Environment()
 mail = Mail()
+io = SocketIO()
 
 def create_app(): 
     app = Flask(__name__)
     
     assets = Environment(app)
-    assets.debug = app.debug
+    assets.debug = True
     assets.register(bundles)
     
     connectionParams = dbConfig.connString
@@ -59,3 +61,20 @@ def configure_mail(app: Flask):
 
     mail = Mail(app)
     return mail
+
+app = create_app()
+io = SocketIO(app, async_mode='threading', cors_allowed_origins="*")
+users = {}
+
+@io.on('connect')
+def user_connects():
+        print('User connected: ', request.sid)
+        
+@io.on('message')
+def handle_message(message):
+    print('Mensaje interceptado: [user] ' + message['user'] + ': ' + message['message'])
+    io.emit('get-message', message['message'], include_self=False)
+
+@io.on('disconect')
+def disconect():
+    print('Un usuario se ha desconectado')

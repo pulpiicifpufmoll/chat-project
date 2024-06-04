@@ -1,8 +1,16 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, HiddenField, PasswordField, BooleanField, SubmitField
-from wtforms.validators import DataRequired, Email, EqualTo, Length
+from wtforms import StringField, HiddenField, PasswordField, BooleanField, SubmitField, FileField
+from wtforms.validators import DataRequired, Email, EqualTo, Length, ValidationError
 from flask_login import current_user
 from .models import User
+
+def valid_email(form, field):
+    if '@' in field.data:
+        local_part, domain_part = field.data.rsplit('@', 1)
+        if '.' in local_part:
+            local_part = local_part.replace('.', '')
+        if not local_part.isalnum():
+            raise ValidationError('Correo electrónico inválido.')
 
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()], render_kw={"placeholder": "Correo electrónico", "id": "email-log"})
@@ -22,7 +30,8 @@ class RegisterForm(FlaskForm):
 
 class SettingsData(FlaskForm):
     fullname = StringField('Nombre', validators=[DataRequired()])
-    email = StringField('Email', validators=[DataRequired(), Email()])
+    email = StringField('Email', validators=[Email(), valid_email])
+    profile_picture = FileField('Photo', render_kw={"accept": "image/*"})
     form_key = HiddenField('form-key', default="form-main")
 
 class SettingsPasswords(FlaskForm):

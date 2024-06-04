@@ -92,3 +92,34 @@ aside {
     color: var(--primary-color);
     font-size: smaller;
   }
+
+  #social-icons-container {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+  }
+  
+  .social-text {
+    text-align: center;
+    padding: 0px;
+    color: white;
+    font-size: 20px;
+    align-items: center;
+  }
+  
+  .social-icons {
+    text-align: center;
+    padding: 20px;
+    margin-left: 15px;
+  }
+  
+  .social-icons a {
+    margin-right: 10px;
+    color: white;
+    font-size: 20px;
+  
+  }
+  
+  .social-icons a:hover {
+    color: #201161;
+  }

@@ -4,9 +4,9 @@ from .models import User
 from flask_login import current_user, logout_user, login_required, AnonymousUserMixin
 from .forms import LoginForm, RegisterForm, SettingsData, SettingsPasswords
 import re
-from .utils import email_pattern, validation_auth_errors, validation_login, validation_register
+from ..utils import email_pattern, validation_auth_errors, validation_login, validation_register
 from flask_principal import identity_changed, Identity, AnonymousIdentity
-from .utils import verify_user_token, send_email_forgot_password, create_user_token, send_email_active_account
+from ..utils import verify_user_token, send_email_forgot_password, create_user_token, send_email_active_account
 
 @bp_auth.route('/')
 def root():
@@ -20,16 +20,16 @@ def settings():
     
     settings_data.fullname.render_kw = {"value": current_user.fullname, "id": "fullname"}
     settings_data.email.render_kw = {"value": current_user.email, "id": "email"}
-    
     if request.method == "POST":
         if settings_data.form_key.data == "form-settings":
             if settings_data.validate_on_submit():
                 fullname = settings_data.fullname.data
-                email = settings_data.email.data
-                current_user.email = email
+                profile_picture = settings_data.profile_picture.data
+                
                 current_user.fullname = fullname
+                current_user.profile_picture = profile_picture.filename
                 User.save(current_user)
-                return make_response(jsonify({'message': "Datos actualizados"}), 200)  
+                return make_response(jsonify({'message': "Datos actualizados", 'profile_picture': profile_picture.filename}), 200)  
             
             return make_response(validation_auth_errors(settings_data), 400)  
 
@@ -54,12 +54,12 @@ def settings():
      
     return render_template('settings/settings.html',  
                            settings_data=settings_data, 
-                           settings_passwords=settings_passwords
+                           settings_passwords=settings_passwords,
+                           profile_picture=current_user.profile_picture
                            )
 
 @bp_auth.route('/auth', methods=['GET', 'POST'])
 def auth():
-    print("PERO BUENOOOOOOOOOOOOOOOOO")
     login_form = LoginForm()
     register_form = RegisterForm()
 
@@ -129,9 +129,9 @@ def active_account(token):
     if request.method == 'POST':
         try:
             send_email_active_account(user, token)
-            return make_response(jsonify({'message': "active account mail sended"}), 200)
+            return make_response(jsonify({'message': "Correo de activación enviado"}), 200)
         except Exception as e:
-            return make_response(jsonify({'message': "error sending active account mail"}), 500)
+            return make_response(jsonify({'message': "Error enviando el correo de activación"}), 500)
     elif request.method == 'GET':
         user.active_user()
         user.save()

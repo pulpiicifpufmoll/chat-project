@@ -4,21 +4,6 @@
 {{ super() }}
 {% endblock %}
 {% block body %}
-<div class="social-icons-container">
-    <button id="social-btn">Síguenos <span class="arrow-down">&#9660;</span></button>
-    <div class="social-icons" id="social-icons-container">
-        <a class="social" href="https://www.youtube.com/@angel24oficinascentrales79" target="_blank"><i
-                class="bx bxl-youtube"></i></a>
-        <a class="social" href="https://www.linkedin.com/company/angel24/mycompany/verification/" target="_blank"><i
-                class="bx bxl-linkedin"></i></a>
-        <a class="social" href="https://twitter.com/i/flow/login?redirect_after_login=%2Fangel24_es" target="_blank"><i
-                class="bx bxl-twitter"></i></a>
-        <a class="social" href="https://www.facebook.com/angel24outsourcing/" target="_blank"><i
-                class="bx bxl-facebook"></i></a>
-        <a class="social" href="https://www.instagram.com/angel24_es/?hl=en" target="_blank"><i
-                class="bx bxl-instagram"></i></a>
-    </div>
-</div>
 <section class="auth">
     <div class="bubble-container"></div>
     <div class="container-form register">
@@ -51,9 +36,7 @@
                         <i class='bx bx-lock'></i>
                         {{ register_form.password_confirm }} <br>
                     </label>
-                    submit = SubmitField('Crear cuenta', render_kw={"id": "submit-register"})
-                    <button type="submit" id="submit-register">Enviar</button>
-                    <!-- {{ register_form.submit }} -->
+                    {{ register_form.submit }}
                 </form>
             </div>
         </div>

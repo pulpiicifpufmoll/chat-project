@@ -19,7 +19,8 @@ class User(db.Model, UserMixin):
     role: Mapped[str] = db.Column(db.String(5))
     authenticated: Mapped[bool] = db.Column(db.Boolean, default=False, nullable=False)
     active: Mapped[bool] = db.Column(db.Boolean, default=False, nullable=False)
-
+    profile_picture: Mapped[str] = db.Column(db.String(255))
+    
     def __init__(self, fullname, email, password, create_date, role):
         self.fullname = fullname
         self.email = email
@@ -28,6 +29,7 @@ class User(db.Model, UserMixin):
         self.role = role
         self.authenticated = False
         self.active = False
+        self.profile_picture = None
         
     def __repr__(self):
         return f'User {self.email}, {self.fullname}, created on: {self.create_date}, authenticated: {self.authenticated}'
@@ -58,7 +60,7 @@ class User(db.Model, UserMixin):
     
     def toJson(self):
         usuario_dict = {
-            'fullanme': self.fullname,
+            'fullname': self.fullname,
             'email': self.email,
             'role': self.role
         }

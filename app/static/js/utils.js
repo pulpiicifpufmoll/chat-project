@@ -20,7 +20,7 @@ function showToast(message, type) {
     var toastContainer = document.getElementById("toast-container");
 
     // Eliminar Toast existente antes de agreagar otro
-    while (toastContainer.firstChild) {
+    while (toastContainer != undefined && toastContainer.firstChild) {
         toastContainer.removeChild(toastContainer.firstChild);
     }
 
@@ -36,7 +36,7 @@ function showToast(message, type) {
 }
 
 function createBubbles() {
-    const numBubbles = 30;
+    const numBubbles = 25;
     const bubbleContainer = document.querySelector(".bubble-container");
 
     for (let i = 0; i < numBubbles; i++) {
@@ -45,7 +45,7 @@ function createBubbles() {
         bubble.style.left = `${Math.random() * 100}%`;
         bubble.style.animationDuration = `${Math.random() * 30 + 15}s`;
 
-        const size = Math.random() * 10 + 5;
+        const size = Math.random() * 25 + 5;
         bubble.style.width = `${size}px`;
         bubble.style.height = `${size}px`;
 

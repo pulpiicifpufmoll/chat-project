@@ -19,9 +19,8 @@ btnSignUp.addEventListener("click", e => {
 })
 
 document.getElementById('register-form').addEventListener('submit', function (event) {
-    console.log("holiiiiiiiiiiii")
     event.preventDefault();
-    //register();
+    register();
 });
 
 document.getElementById('login-form').addEventListener('submit', function (event) {
@@ -51,6 +50,8 @@ function login() {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
                 var userData = JSON.parse(xhr.response);
+                localStorage.setItem("user-logged", JSON.stringify(userData))
+                console.log(userData)
                 if (userData.role != null && userData.role == "admin") {
                     window.location.replace("/admin");
                 } else {
@@ -67,7 +68,6 @@ function login() {
 }
 
 function register() {
-    console.log("lolazo")
     var registerForm = document.getElementById('register-form');
     var formData = new FormData(registerForm);
 
@@ -78,7 +78,6 @@ function register() {
             if (xhr.status === 200) {
                 var responseData = JSON.parse(xhr.responseText);
                 showToast(responseData.message, "success");
-                // Si se ha podido crear, se cierra la ventana y se abre la de login
                 formRegister.classList.add("hide");
                 formLogin.classList.remove("hide")
             } else {
@@ -87,7 +86,7 @@ function register() {
             }
         }
     };
-    // xhr.send(setFormKeyInData(formData, false));
+    xhr.send(setFormKeyInData(formData, false));
     return false;
 }
 
@@ -108,22 +107,4 @@ function setFormKeyInData(formData, is_login) {
     return updatedFormData
 }
 
-createBubbles();
-
-
-document.getElementById("social-btn").addEventListener("mouseover", function () {
-    var socialIconsContainer = document.querySelector(".social-icons");
-    socialIconsContainer.style.display = "block";
-});
-
-document.querySelector(".social-icons-container").addEventListener("mouseleave", function (event) {
-    if (!event.relatedTarget || !event.relatedTarget.closest(".social-icons-container")) {
-        var socialIconsContainer = document.querySelector(".social-icons");
-        socialIconsContainer.style.display = "none";
-    }
-});
-
-document.querySelector(".social-icons").addEventListener("mouseenter", function () {
-    var socialIconsContainer = document.querySelector(".social-icons");
-    socialIconsContainer.style.display = "block";
-});
+// createBubbles();

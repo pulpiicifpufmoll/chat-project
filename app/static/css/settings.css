@@ -28,19 +28,23 @@ form#settings-form-password{
     width: 60%;
 }
 
-/* form .form-control,form .form-control:focus{
-    border-color:transparent;
-    border-bottom-color: red;
-    box-shadow:none;
-} */
+form .row div:first-child{
+    display: flex;
+    flex-direction: column;
+}
 
 form .btn{ 
     border-radius: 0px;
     border-color: transparent;
 }
 
+.form-group {
+    width: 100%;
+}
+
 .form-group input{
     width:100%;
+    margin-top: 15px;
     background-color: #fafcff59;
     border: none;
     padding: 5px;
@@ -54,23 +58,18 @@ input:focus {
     outline: none;
 }
 
-input[type="file"]{
-    margin-top: 10px;
-    max-width: 200px;
-}
-
 .save-changes{
-    background-color: var(--sidebar-text-color);
+    background-color: #406cb3;    
     color: white;
 }
 
 .save-changes:hover, .change-form:hover{
-    background-color: white;
-    color: var(--sidebar-text-color);
+    background-color: #201161;
+    color: white;
 }
 
 .change-form{
-    background-color: #f0bd30;
+    background-color: rgb(224, 221, 39);    
     color: black;
 }
 

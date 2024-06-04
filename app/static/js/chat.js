@@ -1,397 +1,78 @@
+import { showToast, createBubbles } from './utils.js';
 
 const ip = '127.0.0.1';
 const port = '8001';
 const url = `${ip}:${port}`;
-var username = 'sergi';
-var deleteVisible = false;
-var mode = true;           
-var files_to_ingest = [];
-var file_names_to_ingest = [];
-var ingested_files = [];
-var selected_files = [];
-var reader;
+var socket;
+var user;
 
+document.addEventListener("DOMContentLoaded", async function event(event) {
+  event.preventDefault()
+  await getCurrentUser().then((result) => {
+    user = result
+    socket = io.connect('http://localhost:5001')
 
-/// NAV BUTTONS ///
+    socket.on('connect', () => {
+      console.log('Conexióne establecida!');
+    })
 
-document.getElementById("search").addEventListener("click", function () {
-  changeMode1()
+    socket.on('message', (message) => {
+      console.log('Mensaje recibido:', message);
+    });
+
+    socket.on('get-message', (message) => {
+      addResponseMessage(message)
+    })
+  })
 })
 
-function changeMode1() {
-  var searchBtn = document.getElementById('search');
-  var queryBtn = document.getElementById('query');
-  var searchDisplay = document.getElementById('search-display');
-  var queryDisplay = document.getElementById('query-display');
-
-  mode = true;
-  searchBtn.className = 'btn btn-primary';
-  queryBtn.className = 'btn btn-secondary';
-  queryDisplay.style.display = 'none';
-  searchDisplay.style.display = 'block';
-}
-
-document.getElementById("query").addEventListener("click", function () {
-  changeMode2()
-})
-
-function changeMode2() {
-  var searchBtn = document.getElementById('search');
-  var queryBtn = document.getElementById('query');
-  var searchDisplay = document.getElementById('search-display');
-  var queryDisplay = document.getElementById('query-display');
-
-  mode = false;
-  searchBtn.className = 'btn btn-secondary';
-  queryBtn.className = 'btn btn-primary';
-  queryDisplay.style.display = 'block';
-  searchDisplay.style.display = 'none';
-}
-
-/// END NAV BUTTONS ///
-
-
-/// CHAT BUTTONS ///
-
-$(window).on('keydown', function (e) {
+$(window).on('keydown', async function (e) {
   if (e.key === 'Enter') {
-    send();
+    sendMessage()
     return false;
   }
 })
 
-document.getElementById('send-btn').addEventListener("click", async function() {
-  await send()
-})
+async function getCurrentUser() {
+  var response = await fetch(`/user-info`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+    }
+  });
 
-async function send() {
-  var span = document.getElementsByClassName("input message-input");
-  var msg = span[0].textContent.trim();
-  var searchDisplay = document.getElementById('search-display');
-  var queryDisplay = document.getElementById('query-display');
-  var loading = document.getElementById('loading-chat');
-  var cronometro = document.getElementById('chat-crono');
-
-  if (msg === '' || msg === "Escribe un mensaje...") {
-    return false;
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
   }
-  insertMessage(msg)
-  span[0].innerHTML = "";
-  loading.style.display = 'block';
-  input.value = '';
-  if (mode) {
-    //await search(value, searchDisplay, cronometro);
-  } else {
-    //await query(value, queryDisplay, cronometro);
-  }
-  loading.style.display = 'none';
-  console.log("gg well played")
+  var userInfo = await response.json();
+  return userInfo
 }
 
+document.getElementById('send-btn').addEventListener('click', function send(event) {
+  sendMessage(event)
+})
+
+function sendMessage() {
+  var span = document.getElementsByClassName("input message-input");
+  var message = span[0].textContent.trim();
+  if (checkIfInputIsEmpty(message)) {
+    addUserMessage(message)
+    span[0].innerHTML = "";
+  }
+}
 
 document.getElementById('reset-btn').addEventListener("click", reset)
 
 function reset() {
   document.getElementById('chat').innerHTML = '';
   document.getElementById('input').innerHTML = '';
-  document.getElementById('chat-crono').innerHTML = '';
 }
-
-
-async function query(value, display, cronometro) {
-  display.innerHTML += "<div class='border bg-primary text-light p-2 ml-auto message mt-2 mb-2'>" + value + "</div>";
-  display.innerHTML += "<div id='chat-message' class='border bg-dark text-light p-2 message'></div>";
-  var chat_message = document.getElementById('chat-message');
-  try {
-    var requestBody = {
-      context_filter: {
-        docs_ids: selected_files
-      },
-      include_sources: true,
-      messages: [
-        {
-          "content": "Answer only in spanish",
-          "role": "system"
-        },
-        {
-          "content": value,
-          "role": "user"
-        }
-      ],
-      stream: true,
-      use_context: true
-    };
-    document.getElementById('stop-btn').style.display = 'flex';
-    document.getElementById('send-btn').style.display = 'none';
-    var startTime = performance.now();
-    var requestId = requestAnimationFrame(updateElapsedTime);
-    var response = await fetch(`http://${url}/v1/chat/completions`, {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': username
-      }
-    });
-    reader = response.body.getReader();
-    var files = [], pages = [];
-    var message = '';
-
-    while (true) {
-      var { done, value } = await reader.read();
-      if (done) break;
-      console.log('value: ', value);
-      var decodedValue = new TextDecoder().decode(value);
-      console.log(decodedValue);
-      var escaped = escapeDoubleQuotes(decodedValue.substring(6));
-      console.log(escaped);
-      if (escaped.trim() === '[DONE]') break;
-      var parsedValue = JSON.parse(escaped);
-      var choices = parsedValue.choices;
-      choices.forEach(choice => {
-        var content = choice.delta.content;
-        console.log("Contenido:", content);
-        if (choice.sources !== null) {
-          choice.sources.forEach(source => {
-            var file = source.document.doc_metadata.file_name;
-            var page = source.document.doc_metadata.page_label;
-
-            console.log("Nombre del archivo:", file);
-            console.log("Etiqueta de página:", page);
-            if (!files.includes(file)) {
-              files.push(file);
-            }
-            if (!pages.includes(page)) {
-              pages.push(page);
-            }
-          });
-        }
-        var header = '';
-        for (var i = 0; i < files.length; i++) {
-          header += files[i] + ' pag. ' + pages[i] + ' , ';
-        }
-        header = header.slice(0, -2)
-        header += "<hr class='bg-light m-0'> </br>"
-        message += content;
-        chat_message.innerHTML = header + message;
-      });
-
-    }
-
-    cancelAnimationFrame(requestId);
-    var endTime = performance.now();
-    document.getElementById('send-btn').style.display = 'flex';
-    document.getElementById('stop-btn').style.display = 'none';
-
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    } else {
-      var responseTimeInSeconds = (endTime - startTime) / 1000;
-      cronometro.textContent = responseTimeInSeconds.toFixed(2) + ' s';
-    }
-
-    chat_message.id = "#"
-  } catch (error) {
-    if (error instanceof SyntaxError && error.message.includes('unexpected token')) {
-      return;
-    }
-    console.error('There was an error with the fetch request:', error);
-    cancelAnimationFrame(requestId);
-  }
-
-  function updateElapsedTime(currentTime) {
-    var elapsedTime = (currentTime - startTime) / 1000;
-    cronometro.textContent = elapsedTime.toFixed(2) + ' s';
-    requestId = requestAnimationFrame(updateElapsedTime);
-  }
-}
-
-async function search(value, display, cronometro) {
-  //nextMsg();
-  display.innerHTML += "<div id='msg-cont'><div class='border bg-primary text-light p-2 ml-auto message mt-2 mb-2'>" + value + "</div>";
-
-  try {
-    var responseData = await getChunks(value, cronometro);
-
-    var messages = '';
-    var count = 1;
-    responseData.data.forEach((chunk) => {
-      var text = chunk.text;
-      var file = chunk.document.doc_metadata.file_name;
-      var page = chunk.document.doc_metadata.page_label;
-      if (comprobarContenido(value, text)) {
-        var message = buildMessage(count, file, page, text)
-        messages += message;
-        count++;
-      }
-    });
-
-    if (messages !== '') {
-      display.innerHTML += "<div class='d-flex'><div class='border bg-dark text-light p-2 message'>" + messages + "</div><button id='up-btn' class='mt-auto ml-2 mb-1 align-items-center justify-content-center' onclick='goUp()'><div class='material-symbols-outlined'>arrow_upward</div></button></div></div>";
-    }
-    document.getElementById('chat').scrollTop = display.scrollHeight;
-  } catch (error) {
-    console.error('There was an error with the fetch request:', error);
-  }
-}
-
-function buildMessage(count, file, page, text) {
-  var message;
-  var regex = /www\.[^\s]+/g;
-  var links = text.match(regex);
-  text = text.replace(/(www\.[^\s]+|https?:\/\/[^\s]+)/g, '');
-  if (page === undefined) {
-    message = `
-                  ${count} . <b>${file}</b>
-                  </br>
-                  <p class='ml-2 m-0'>${text}</p>
-                  </br>
-                  `
-  } else {
-    message = `
-                  ${count} . <b>${file} (pagina ${page})</b>
-                  </br>
-                  <p class='ml-2 m-0'>${text}</p>
-                  </br>
-                  `
-  }
-  if (links) {
-    links.forEach(function (link) {
-      message += `<a href='http://${link}'>${link}</a> 
-                                      </br>`
-    });
-  }
-  message += "<hr class='bg-light'>";
-  return message;
-}
-
-
-async function getChunks(value, cronometro) {
-  try {
-    var requestBody = {
-      text: value,
-      limit: 100,
-      prev_next_chunks: 50
-    };
-    var startTime = performance.now();
-    var requestId = requestAnimationFrame(updateElapsedTime);
-    var response = await fetzlch(`http://${url}/v1/chunks`, {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': username
-      }
-    });
-    cancelAnimationFrame(requestId);
-    var endTime = performance.now();
-
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    } else {
-      var responseTimeInSeconds = (endTime - startTime) / 1000;
-      cronometro.textContent = responseTimeInSeconds.toFixed(2) + ' s';
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error('There was an error with the fetch request:', error);
-  }
-
-  function updateElapsedTime(currentTime) {
-    var elapsedTime = (currentTime - startTime) / 1000;
-    cronometro.textContent = elapsedTime.toFixed(2) + ' s';
-    requestId = requestAnimationFrame(updateElapsedTime);
-  }
-}
-
-function comprobarContenido(cadena1, cadena2) {
-  var server_words = cadena2.split(' ');
-  var user_words = cadena1.split(' ');
-  var encontrada = true;
-
-  user_words.forEach(function (palabra, index) {
-    user_words[index] = processText(palabra);
-  });
-
-  server_words.forEach(function (palabra, index) {
-    server_words[index] = processText(palabra);
-  });
-
-  user_words.forEach(function (word) {
-    if (!server_words.includes(word)) {
-      encontrada = false;
-    }
-  });
-
-  return encontrada;
-}
-
-function processText(cadena) {
-  cadena = cadena.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-  cadena = cadena.replace(/[.,()'…"“”:\[\]\n\t—]/g, '');
-  cadena = cadena.toLowerCase();
-
-  return cadena;
-}
-
-function escapeDoubleQuotes(obj) {
-  if (typeof obj === 'string') {
-    // Escapar comillas dobles dentro de la cadena
-    return obj.replace(/"(.*?)"/g, function (match, p1) {
-      return '"' + p1.replace(/"/g, '\\"') + '"';
-    });
-  }
-  else if (typeof obj === 'object') {
-    // Si el objeto es un objeto, iterar sobre sus propiedades y aplicar la función a cada valor
-    for (var key in obj) {
-      if (obj.hasOwnProperty(key)) {
-        obj[key] = escapeDoubleQuotes(obj[key]);
-      }
-    }
-  }
-  return obj;
-}
-
-// function closeReader() {
-//   if (reader) {
-//       reader.cancel();
-//   }
-// }
-
-// function goUp() {
-//   var chat = document.getElementById('chat');
-//   var msgCont = document.getElementById('msg-cont');
-//   var scrollTop = msgCont.offsetTop - chat.offsetTop;
-
-//   chat.scrollTop = scrollTop;
-// }
-
-// function nextMsg() {
-//   var msgCont = document.getElementById('msg-cont');
-
-//   if (msgCont) {
-//       var upButton = document.getElementById('up-btn');
-//       if (upButton){
-//           upButton.parentNode.removeChild(upButton);
-//       }
-//       msgCont.id = '#';
-//   }
-// }
-
 
 //VISUAL//----------------------------------------------------
 
 var $messages = $('.messages-content'),
   d, h, m,
   i = 0;
-
-$(window).on('load', function () {
-  $messages.mCustomScrollbar();
-  setTimeout(function () {
-    fakeMessage();
-  }, 100);
-});
 
 function updateScrollbar() {
   $messages.mCustomScrollbar("update").mCustomScrollbar('scrollTo', 'bottom', {
@@ -409,52 +90,29 @@ function setDate() {
 }
 
 
-function insertMessage(msg) {
-  $('<div class="message message-personal">' + msg + '</div>').appendTo($('.mCSB_container')).addClass('new');
-  setDate();
-  updateScrollbar();
-  setTimeout(function () {
-    fakeMessage();
-  }, 1000 + (Math.random() * 20) * 100);
-}
-
-// $('.message-submit').on('click', function () {
-//   insertMessage();
-// });
-
-var Fake = [
-  'Hola, en qué puedo ayudarte? :)',
-  'Claro que sii',
-  'How are you?',
-  'Not too bad, thanks',
-  'What do you do?',
-  'That\'s awesome',
-  'Codepen is a nice place to stay',
-  'I think you\'re a nice person',
-  'Why do you think that?',
-  'Can you explain?',
-  'Anyway I\'ve gotta go now',
-  'It was a pleasure chat with you',
-  'Time to make a new codepen',
-  'Bye',
-  ':)'
-]
-
-function fakeMessage() {
-  if ($('.message-input').val() != '') {
+function checkIfInputIsEmpty(input) {
+  if (input === '' || input === "Escribe un mensaje...") {
     return false;
   }
-  $('<div class="message loading new"><figure class="avatar"><img src="/static/img/imagen_chat.png"/></figure><span></span></div>').appendTo($('.mCSB_container'));
+  return true
+}
+
+function addUserMessage(msg) {
+  socket.emit('message', {
+    'message': msg,
+    'user': user.fullname
+  });
+  $('<div class="message message-personal">' + '<span class="message-username">' + user.fullname + '</span>' + '<span>' + msg + '</span>' + '</div>').appendTo($('.mCSB_container')).addClass('new');
+  setDate();
   updateScrollbar();
+}
 
-  setTimeout(function () {
-    $('.message.loading').remove();
-    $('<div class="message new"><figure class="avatar"><img src="/static/img/imagen_chat.png"/></figure>' + Fake[i] + '</div>').appendTo($('.mCSB_container')).addClass('new');
-    setDate();
-    updateScrollbar();
-    i++;
-  }, 1000 + (Math.random() * 20) * 100);
+function addResponseMessage(message) {
+  $('.message.loading').remove();
+  $('<div class="message new response">' + message + '<figure class="avatar"><img src="/static/img/imagen_chat.png"/></figure></div>').appendTo($('.mCSB_container')).addClass('new');
 
+  setDate();
+  updateScrollbar();
 }
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -480,6 +138,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 });
+
 
 //# sourceMappingURL=jquery.mCustomScrollbar.min.js.map
 
