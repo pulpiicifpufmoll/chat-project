@@ -27,7 +27,6 @@ bundles = {
     ),
     
     'chat_css': Bundle(
-        'css/scrollbar.css',
         'css/chat.scss',        
         filters='libsass', 
         output='gen/sass.css'

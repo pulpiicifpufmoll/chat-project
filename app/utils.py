@@ -1,7 +1,7 @@
 from functools import wraps
 from flask import abort, make_response, jsonify, url_for, current_app
 from flask_login import current_user, login_user
-from .auth.models import User
+from .models import User
 import re
 from datetime import datetime
 from flask_principal import identity_changed, Identity, AnonymousIdentity
@@ -23,12 +23,11 @@ def get_email_corporation(email):
 
 def createUserInfoJson(user_id):
     user : User = User.get_user(user_id)
-    # company : Company = Company.get_company(user.company_id)
     return {
         'user_id': user.id,
         'username': user.fullname,
         'email': user.email,
-        'company_id': user.company_id
+        'profile_picture': user.profile_picture
     }
 
 # --------------------LOGIN------------------------
@@ -46,7 +45,7 @@ def validation_login(form):
             user.authenticated = True
             user.save()
             
-            login_user(user, remember=form.remember_me.data)
+            login_user(user)
             
             # Se establece el rol 'user' para el usuario     
             identity_changed.send(current_app._get_current_object(), identity=Identity(user.id))
@@ -93,6 +92,41 @@ def validation_register(form):
     
     else:
         return validation_auth_errors(form)
+
+# ----------------- SETTINGS ----------------------
+def uploadPicture(file):
+    if os.path.exists(current_app.config['PICTURES_FOLDER'] + file.filename):
+        return 'El archivo ya existe', 400
+    file.save(os.path.join(current_app.config['PICTURES_FOLDER'], file.filename))
+
+def validateSettingsData(settings_data):
+        if settings_data.validate_on_submit():
+            fullname = settings_data.fullname.data
+            profile_picture = settings_data.profile_picture.data
+            if profile_picture.filename != "":
+                uploadPicture(profile_picture)
+                current_user.profile_picture = profile_picture.filename
+            if fullname == "":
+                return make_response(jsonify({'message': "El nombre de usuario no puede estar vacío" }), 400)
+            current_user.fullname = fullname
+            User.save(current_user)
+            return True
+
+def validateSettingsPasswords(settings_passwords):
+     if settings_passwords.is_submitted():
+        user = User.get_user(current_user.id)
+        old_password  = settings_passwords.old_password.data
+        new_password = settings_passwords.new_password.data
+        repeated_password = settings_passwords.repeat_password.data
+        if not User.check_password(user.password, old_password):
+            return make_response(jsonify({'message': "La contraseña antigua no coincide" }), 400)
+        elif not (new_password == repeated_password):
+            return make_response(jsonify({'message': "Las nuevas contraseñas no coinciden" }), 400)
+        elif User.check_password(user.password, new_password):
+            return make_response(jsonify({'message': "Nueva contraseña igual a la antigua" }), 400)
+        user.password = User.hash_password(new_password)
+        User.save(user)
+        return True
 
 # ------------------- ERRORS -----------------------
 

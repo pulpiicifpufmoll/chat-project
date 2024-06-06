@@ -1,4 +1,4 @@
-import { showToast, createBubbles } from './utils.js';
+import showToast from './utils.js';
 
 
 const btnSignIn = document.getElementById("sign-in"),
@@ -106,5 +106,3 @@ function setFormKeyInData(formData, is_login) {
     });
     return updatedFormData
 }
-
-// createBubbles();

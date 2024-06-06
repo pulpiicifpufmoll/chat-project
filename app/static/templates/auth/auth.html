@@ -5,7 +5,6 @@
 {% endblock %}
 {% block body %}
 <section class="auth">
-    <div class="bubble-container"></div>
     <div class="container-form register">
         <div class="information">
             <div class="info-childs">
@@ -66,10 +65,6 @@
                         <i class='bx bx-lock'></i>
                         {{ login_form.password }} <br>
                     </label>
-                    <div class="remember">
-                        {{ login_form.remember_me.label }}
-                        {{ login_form.remember_me }}
-                    </div>
                     {{ login_form.submit }}
                     <a href="/forgot-password" class="gradient-text">¿Olvidó su contraseña?</a>
                 </form>

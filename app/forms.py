@@ -15,7 +15,6 @@ def valid_email(form, field):
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()], render_kw={"placeholder": "Correo electrónico", "id": "email-log"})
     password = PasswordField('Password', validators=[DataRequired()], render_kw={"placeholder": "Contraseña", "id": "password-log"})
-    remember_me = BooleanField('Recuérdame')
     submit = SubmitField('Iniciar sesión',  render_kw={"id": "submit-login"})
     form_key = HiddenField('form-key', default='')
 
@@ -31,7 +30,7 @@ class RegisterForm(FlaskForm):
 class SettingsData(FlaskForm):
     fullname = StringField('Nombre', validators=[DataRequired()])
     email = StringField('Email', validators=[Email(), valid_email])
-    profile_picture = FileField('Photo', render_kw={"accept": "image/*"})
+    profile_picture = FileField('Foto de perfil', render_kw={"accept": "image/*"})
     form_key = HiddenField('form-key', default="form-main")
 
 class SettingsPasswords(FlaskForm):

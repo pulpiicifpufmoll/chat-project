@@ -1,8 +1,8 @@
 from flask import render_template, abort ,jsonify, request, make_response, redirect, url_for
 from . import bp_auth
-from .models import User
+from ..models import User
 from flask_login import current_user, logout_user, login_required, AnonymousUserMixin
-from .forms import LoginForm, RegisterForm, SettingsData, SettingsPasswords
+from ..forms import LoginForm, RegisterForm, SettingsData, SettingsPasswords
 import re
 from ..utils import email_pattern, validation_auth_errors, validation_login, validation_register
 from flask_principal import identity_changed, Identity, AnonymousIdentity
@@ -12,59 +12,13 @@ from ..utils import verify_user_token, send_email_forgot_password, create_user_t
 def root():
    return redirect(url_for("auth.auth"))
 
-@bp_auth.route('/settings', methods=['GET', 'POST'])
-@login_required
-def settings():
-    settings_data = SettingsData()
-    settings_passwords = SettingsPasswords()
-    
-    settings_data.fullname.render_kw = {"value": current_user.fullname, "id": "fullname"}
-    settings_data.email.render_kw = {"value": current_user.email, "id": "email"}
-    if request.method == "POST":
-        if settings_data.form_key.data == "form-settings":
-            if settings_data.validate_on_submit():
-                fullname = settings_data.fullname.data
-                profile_picture = settings_data.profile_picture.data
-                
-                current_user.fullname = fullname
-                current_user.profile_picture = profile_picture.filename
-                User.save(current_user)
-                return make_response(jsonify({'message': "Datos actualizados", 'profile_picture': profile_picture.filename}), 200)  
-            
-            return make_response(validation_auth_errors(settings_data), 400)  
-
-        elif settings_passwords.form_key.data == "form-password":
-            
-            if settings_passwords.is_submitted():
-                user = User.get_user(current_user.id)
-                old_password  = settings_passwords.old_password.data
-                new_password = settings_passwords.new_password.data
-                repeated_password = settings_passwords.repeat_password.data
-                if not User.check_password(user.password, old_password):
-                    return make_response(jsonify({'message': "La contraseña antigua no coincide" }), 400)
-                elif not (new_password == repeated_password):
-                    return make_response(jsonify({'message': "Las nuevas contraseñas no coinciden" }), 400)
-                elif User.check_password(user.password, new_password):
-                    return make_response(jsonify({'message': "Nueva contraseña igual a la antigua" }), 400)
-                user.password = User.hash_password(new_password)
-                User.save(user)
-                return make_response(jsonify({'message': "Contraseña actualizada"}), 200)  
-            
-            return make_response(validation_auth_errors(settings_passwords), 400) 
-     
-    return render_template('settings/settings.html',  
-                           settings_data=settings_data, 
-                           settings_passwords=settings_passwords,
-                           profile_picture=current_user.profile_picture
-                           )
-
 @bp_auth.route('/auth', methods=['GET', 'POST'])
 def auth():
     login_form = LoginForm()
     register_form = RegisterForm()
 
-    if current_user.is_authenticated:
-        return redirect("/chat")
+    # if current_user.is_authenticated:
+    #     return redirect("/chat")
     
     if request.method == "POST":
         if login_form.form_key.data == "form-login":

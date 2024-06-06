@@ -1,6 +1,7 @@
-from app import app
-from app import io
+from app import app, io, db
 
 if __name__ == "__main__":
-    io.run(app, debug= True)
-    # app.run()
+    with app.app_context():
+        db.create_all()
+        print("All tables created.")
+    io.run(app, debug= True, host="0.0.0.0", port=5050)

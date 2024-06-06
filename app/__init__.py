@@ -7,7 +7,7 @@ from flask_mail import Mail
 from dotenv import load_dotenv
 from flask_assets import Environment
 from .assets import bundles
-from flask_socketio import SocketIO, join_room, leave_room, emit
+from flask_socketio import SocketIO
 import os
 
 load_dotenv()
@@ -32,7 +32,8 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = "mssql+pyodbc:///?odbc_connect=%s" % connectionParams
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
-    
+    app.config['PICTURES_FOLDER'] = os.path.join(app.root_path, 'static/img/profile/').replace("\\", "/")
+
     loginManager.login_view = "auth.auth"
     loginManager.init_app(app)
 
@@ -43,8 +44,8 @@ def create_app():
 
     from .auth import bp_auth
     app.register_blueprint(bp_auth)
-    from .admin import bp_admin
-    app.register_blueprint(bp_admin)
+    from .settings import bp_settings
+    app.register_blueprint(bp_settings)
     from .chat import bp_chat
     app.register_blueprint(bp_chat)
     from .error_handling import bp_errors
@@ -56,8 +57,8 @@ def configure_mail(app: Flask):
     app.config['MAIL_SERVER'] = 'smtp.gmail.com'
     app.config['MAIL_PORT'] = 465
     app.config['MAIL_USE_SSL'] = True
-    app.config['MAIL_USERNAME'] = "angel24.practicas@gmail.com"
-    app.config['MAIL_PASSWORD'] = "gdzyqdqtsmmhwkye"
+    app.config['MAIL_USERNAME'] = os.getenv("MAIL_USERNAME")
+    app.config['MAIL_PASSWORD'] =  os.getenv("MAIL_PASSWORD")
 
     mail = Mail(app)
     return mail
@@ -72,8 +73,8 @@ def user_connects():
         
 @io.on('message')
 def handle_message(message):
-    print('Mensaje interceptado: [user] ' + message['user'] + ': ' + message['message'])
-    io.emit('get-message', message['message'], include_self=False)
+    print(message)
+    io.emit('get-message', message, include_self=False)
 
 @io.on('disconect')
 def disconect():
