@@ -111,11 +111,6 @@ async function addUserMessage(msg) {
 }
 
 function addResponseMessage(data) {
-  console.log("RESPONSEEEEEEE")
-  console.log(data)
-
-  var profile_picture = "/static/img/profile/default_picture.png"
-
   $('.message.loading').remove();
   $('<div class="message new response"><span class="message-username">' + data.user + '</span>' + '<span>' + data.message + '</span>' + '</div>').appendTo($('.mCSB_container')).addClass('new');
 
