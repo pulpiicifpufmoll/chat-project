@@ -16,17 +16,15 @@ class User(db.Model, UserMixin):
     email: Mapped[str] = db.Column(db.String(50), unique=True, nullable=False)
     password:  Mapped[str] = db.Column(db.String(255), nullable=False)
     create_date: Mapped[datetime] = db.Column(db.DateTime,  default=datetime.now())
-    role: Mapped[str] = db.Column(db.String(5))
     authenticated: Mapped[bool] = db.Column(db.Boolean, default=False, nullable=False)
     active: Mapped[bool] = db.Column(db.Boolean, default=False, nullable=False)
     profile_picture: Mapped[str] = db.Column(db.String(255))
     
-    def __init__(self, fullname, email, password, create_date, role):
+    def __init__(self, fullname, email, password, create_date):
         self.fullname = fullname
         self.email = email
         self.password = password
         self.create_date = create_date
-        self.role = role
         self.authenticated = False
         self.active = False
         self.profile_picture = None
@@ -52,9 +50,6 @@ class User(db.Model, UserMixin):
     def get_id(self):
         return self.id
 
-    def is_admin(self):
-        return self.role
-    
     def is_authenticated(self):
         return self.authenticated
     
@@ -62,7 +57,6 @@ class User(db.Model, UserMixin):
         usuario_dict = {
             'fullname': self.fullname,
             'email': self.email,
-            'role': self.role
         }
         return usuario_dict
  
@@ -101,6 +95,5 @@ class User(db.Model, UserMixin):
     
     @staticmethod
     def check_password(hashed_password, password):
-        # Verifica si el hash de la pass coincide con el hash proporcionado
         hashed_input_password = hashlib.sha256(password.encode('utf-8')).hexdigest()
         return hashed_input_password == hashed_password

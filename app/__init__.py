@@ -48,8 +48,6 @@ def create_app():
     app.register_blueprint(bp_settings)
     from .chat import bp_chat
     app.register_blueprint(bp_chat)
-    from .error_handling import bp_errors
-    app.register_blueprint(bp_errors)
     
     return app
 

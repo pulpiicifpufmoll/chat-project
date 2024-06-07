@@ -85,6 +85,10 @@ const createMainWindow = () => {
 
   // Create the browser mainWindow
   mainWindow = new BrowserWindow({
+    webPreferences: {
+      nodeIntegration: false,
+      // contextIsolation: true,  // Habilitar el aislamiento de contexto
+    },
     width: width - 100,
     height: height - 100,
     // transparent: true, // transparent header bar

@@ -55,17 +55,5 @@ bundles = {
         filters='libsass',
         output="gen/errors.css"   
     ),
-    
-    'admin_css': Bundle(
-        'https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap',
-        'https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0',
-        'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css',
-        'css/admin.css'
-    ),
-    
-    'admin_js': Bundle(
-        'js/admin.js',
-        filters='jsmin',
-        output="gen/admin.js" 
-    )
+
 }

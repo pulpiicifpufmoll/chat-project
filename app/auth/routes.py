@@ -14,20 +14,24 @@ def root():
 
 @bp_auth.route('/auth', methods=['GET', 'POST'])
 def auth():
-    login_form = LoginForm()
-    register_form = RegisterForm()
+    try:    
+        login_form = LoginForm()
+        register_form = RegisterForm()
 
-    # if current_user.is_authenticated:
-    #     return redirect("/chat")
-    
-    if request.method == "POST":
-        if login_form.form_key.data == "form-login":
-            return validation_login(login_form)
-        elif register_form.form_key.data == "form-register":
-            return validation_register(register_form)
-                
-    elif request.method == "GET":
-        return render_template('auth/auth.html', login_form=login_form, register_form=register_form)
+        # if current_user.is_authenticated:
+        #     return redirect("/chat")
+        
+        if request.method == "POST":
+            if login_form.form_key.data == "form-login":
+                return validation_login(login_form)
+            elif register_form.form_key.data == "form-register":
+                return validation_register(register_form)
+                    
+        elif request.method == "GET":
+            return render_template('auth/auth.html', login_form=login_form, register_form=register_form)
+    except Exception as e:
+        print(e)
+        raise(e)
 
 # --------------------FORGOT------------------------
 

@@ -107,7 +107,7 @@ async function addUserMessage(msg) {
   });
   $('<div class="message message-personal"><span class="message-username">' + user.username + '</span>' + '<span>' + msg + '</span>' + '</div>').appendTo($('.mCSB_container')).addClass('new');
   setDate(false);
-  // updateScrollbar();
+  updateScrollbar();
 }
 
 function addResponseMessage(data) {
@@ -117,10 +117,10 @@ function addResponseMessage(data) {
   var profile_picture = "/static/img/profile/default_picture.png"
 
   $('.message.loading').remove();
-  $('<div class="message new response"><span class="message-username">' + data.user + '</span>' + '<span>' + data.message + '</span>' + '<figure class="avatar"><img src="' + profile_picture + '"/></figure></div>').appendTo($('.mCSB_container')).addClass('new');
+  $('<div class="message new response"><span class="message-username">' + data.user + '</span>' + '<span>' + data.message + '</span>' + '</div>').appendTo($('.mCSB_container')).addClass('new');
 
   setDate(true);
-  // updateScrollbar();
+  updateScrollbar();
 }
 
 document.addEventListener('DOMContentLoaded', function () {

@@ -47,7 +47,6 @@ def validation_login(form):
             
             login_user(user)
             
-            # Se establece el rol 'user' para el usuario     
             identity_changed.send(current_app._get_current_object(), identity=Identity(user.id))
             return make_response(jsonify({'user': user.toJson()}), 200)
         
@@ -81,7 +80,7 @@ def validation_register(form):
         elif password != password_confirm:
             return make_response(jsonify({'message': "Las contraseñas no coinciden"}), 400)
 
-        user = User(fullname=fullname, email=email, password=User.hash_password(password), create_date=datetime.now(), role='user')
+        user = User(fullname=fullname, email=email, password=User.hash_password(password), create_date=datetime.now())
         
         User.save(user)
         
