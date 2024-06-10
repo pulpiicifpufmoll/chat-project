@@ -1,8 +1,4 @@
-import { showToast, createBubbles } from './utils.js';
 
-const ip = '127.0.0.1';
-const port = '8001';
-const url = `${ip}:${port}`;
 var socket;
 var user;
 
@@ -10,7 +6,8 @@ document.addEventListener("DOMContentLoaded", async function event(event) {
   event.preventDefault()
   await getCurrentUser().then((result) => {
     user = result
-    socket = io.connect('http://localhost:5001')
+    console.log(user)
+    socket = io.connect('http://localhost:5000')
 
     socket.on('connect', () => {
       console.log('Conexióne establecida!');
@@ -21,6 +18,7 @@ document.addEventListener("DOMContentLoaded", async function event(event) {
     });
 
     socket.on('get-message', (message) => {
+      console.log(message)
       addResponseMessage(message)
     })
   })
@@ -44,8 +42,9 @@ async function getCurrentUser() {
   if (!response.ok) {
     throw new Error('Network response was not ok');
   }
-  var userInfo = await response.json();
-  return userInfo
+  var dataUser = await response.json();
+  console.log(dataUser)
+  return dataUser.user_info
 }
 
 document.getElementById('send-btn').addEventListener('click', function send(event) {
@@ -81,11 +80,15 @@ function updateScrollbar() {
   });
 }
 
-function setDate() {
+function setDate(isResponse) {
   d = new Date()
   if (m != d.getMinutes()) {
     m = d.getMinutes();
-    $('<div class="timestamp">' + d.getHours() + ':' + m + '</div>').appendTo($('.message:last'));
+    if (isResponse){
+      $('<div class="timestamp" style="right:0;">' + d.getHours() + ':' + m + '</div>').appendTo($('.message:last'));
+    } else {
+      $('<div class="timestamp">' + d.getHours() + ':' + m + '</div>').appendTo($('.message:last'));
+    }
   }
 }
 
@@ -97,21 +100,21 @@ function checkIfInputIsEmpty(input) {
   return true
 }
 
-function addUserMessage(msg) {
+async function addUserMessage(msg) {
   socket.emit('message', {
     'message': msg,
-    'user': user.fullname
+    'user': user.username,
   });
-  $('<div class="message message-personal">' + '<span class="message-username">' + user.fullname + '</span>' + '<span>' + msg + '</span>' + '</div>').appendTo($('.mCSB_container')).addClass('new');
-  setDate();
+  $('<div class="message message-personal"><span class="message-username">' + user.username + '</span>' + '<span>' + msg + '</span>' + '</div>').appendTo($('.mCSB_container')).addClass('new');
+  setDate(false);
   updateScrollbar();
 }
 
-function addResponseMessage(message) {
+function addResponseMessage(data) {
   $('.message.loading').remove();
-  $('<div class="message new response">' + message + '<figure class="avatar"><img src="/static/img/imagen_chat.png"/></figure></div>').appendTo($('.mCSB_container')).addClass('new');
+  $('<div class="message new response"><span class="message-username">' + data.user + '</span>' + '<span>' + data.message + '</span>' + '</div>').appendTo($('.mCSB_container')).addClass('new');
 
-  setDate();
+  setDate(true);
   updateScrollbar();
 }
 

@@ -5,23 +5,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/imagen_chat.png') }}">
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
     <title>{% block title %}{% endblock %}</title>
     
-    <!-- {% assets "auth_css" %}
-        <link rel="stylesheet" href="{{ ASSET_URL }}">
-    {% endassets %} -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
-    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
+    {% assets "auth_css" %}
+    <link rel="stylesheet" href="{{ ASSET_URL }}">
+    {% endassets %}
     {% endblock %}
 </head>
 <body>
 {% block body %}
 
 {% endblock %}
-<!-- {% assets "auth_js" %}
-  <script type="module" src="{{ ASSET_URL }}"></script>
-{% endassets %} -->
 <script type="module" src="{{ url_for('static', filename='js/auth.js') }}"></script>
 </body>
 <footer>

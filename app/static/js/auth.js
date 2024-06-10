@@ -1,4 +1,4 @@
-import { showToast, createBubbles } from './utils.js';
+import showToast from './utils.js';
 
 
 const btnSignIn = document.getElementById("sign-in"),
@@ -52,11 +52,8 @@ function login() {
                 var userData = JSON.parse(xhr.response);
                 localStorage.setItem("user-logged", JSON.stringify(userData))
                 console.log(userData)
-                if (userData.role != null && userData.role == "admin") {
-                    window.location.replace("/admin");
-                } else {
-                    window.location.replace("/chat");
-                }
+                window.location.replace("/chat");
+
             } else {
                 var errorData = JSON.parse(xhr.responseText);
                 showToast(errorData.message, "error");
@@ -106,5 +103,3 @@ function setFormKeyInData(formData, is_login) {
     });
     return updatedFormData
 }
-
-// createBubbles();

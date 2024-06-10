@@ -126,14 +126,6 @@ section.auth {
     box-shadow: 0 2px 5px rgba(0, 0, 0, .1);
 }
 
-.remember {
-    width: 100%;
-    text-align: start;
-    color: var(--text-gray-color);
-    padding: 4px;
-    margin-left: 35px;
-}
-
 
 .form>label input {
     width: 100%;
@@ -278,31 +270,6 @@ section.auth {
     display: none;
 }
 
-/* BUBBLES */
-
-.bubble {
-    position: absolute;
-    background-color: rgb(160, 192, 235);
-    width: 5px;
-    height: 10px;
-    border-radius: 50%;
-    animation: move-bubble 10s infinite ease-in-out;
-
-}
-
-@keyframes move-bubble {
-    0% {
-        transform: translateY(50vh) translateX(0) rotate(0deg);
-    }
-
-    50% {
-        transform: translateY(-50vh) translateX(0) rotate(360deg);
-    }
-
-    100% {
-        transform: translateY(50vh) translateX(0) rotate(720deg);
-    }
-}
 
 /* Componentes active_account*/
 

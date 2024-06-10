@@ -48,4 +48,3 @@ function changePassword(token) {
     xhr.send(formData);
     return false
 }
-// createBubbles();

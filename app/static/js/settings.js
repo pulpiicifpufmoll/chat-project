@@ -1,4 +1,4 @@
-import { showToast, createBubbles } from './utils.js';
+import showToast from './utils.js';
 
 document.getElementById('email').readOnly = true
 
@@ -38,9 +38,12 @@ function changeSettings(formId) {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
                 var userData = JSON.parse(xhr.response)
+                console.log(userData)
                 showToast(userData.message, "success")
-                var picture = document.getElementById('default_picture')
-                picture.src = 'static/img/profile/' + userData.profile_picture
+                if (userData.profile_picture != undefined && userData.profile_picture != ""){
+                    var picture = document.getElementsByClassName('profile_picture')
+                    picture[0].src = 'static/img/profile/' + userData.profile_picture
+                }
             } else {
                 var errorData = JSON.parse(xhr.response);
                 showToast(errorData.message, "error");

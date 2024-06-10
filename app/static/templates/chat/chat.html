@@ -4,30 +4,19 @@
 {{ super() }}
 {% assets "chat_css" %}
 <link rel="stylesheet" href="{{ ASSET_URL }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/scrollbar.css') }}">
+
 {% endassets %}
 {% endblock %}
 {% block body %}
 
 <section id="main-container">
-
-  <div id="nav-buttons">
-    <!-- <button id="search" type="button">Buscar
-      texto</button> -->
-    <!-- <button id="query" type="button">Consultar
-      documentos</button> -->
-
-
-    <!-- INVISIBLE -->
-    <div id="loading-chat" class="pl-3 text-light"></div>
-    <div id="chat-crono" class="ml-auto mr-4 text-light"></div>
-  </div>
-
   <div class="chat">
     <div class="messages">
       <div class="messages-content mCustomScrollbar _mCS_1 mCS_no_scrollbar">
         <div id="mCSB_1" class="mCustomScrollBox mCS-light mCSB_vertical mCSB_inside" style="max-height: none;"
           tabindex="0">
-          <div id="mCSB_1_scrollbar_vertical"
+          <!-- <div id="mCSB_1_scrollbar_vertical"
             class="mCSB_scrollTools mCSB_1_scrollbar mCS-light mCSB_scrollTools_vertical" style="display: none;">
             <div class="mCSB_draggerContainer">
               <div id="mCSB_1_dragger_vertical" class="mCSB_dragger"
@@ -36,7 +25,7 @@
                 <div class="mCSB_draggerRail"></div>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -60,8 +49,4 @@
 <script type="module" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.js"></script>
 <script type="module" src="{{ url_for('static', filename='js/scrollbar.js') }}"></script>
 <script type="module" src="{{ url_for('static', filename='js/chat.js') }}"></script>
-
-<!-- {% assets "chat_js" %}
-<script type="module" src="{{ ASSET_URL }}"></script>
-{% endassets %} -->
 {% endblock %}
